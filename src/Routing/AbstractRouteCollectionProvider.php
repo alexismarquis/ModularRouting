@@ -24,6 +24,16 @@ abstract class AbstractRouteCollectionProvider implements RouteCollectionProvide
         $this->loaderResolver = $loaderResolver;
     }
 
+    public function import($resource, $type = null)
+    {
+        $loader = $this->loaderResolver->resolve($resource, $type);
+        if (false === $loader || null === $loader) {
+            return new RouteCollection();
+        }
+
+        return $loader->load($resource, $type);
+    }
+
     protected function loadRouteCollectionFromFile(string $path) : RouteCollection
     {
         if (!file_exists($path)) {
